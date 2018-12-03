@@ -1,18 +1,11 @@
 from heapq import heappush, heappop
 
 def metrices(level, pos):
-    # solvability = 0.0
-    # if has_valid_path(level, pos):
-    #     solvability = 1.0
     return 1.0 if has_valid_path(level, pos) else 0.0
 
 def get_neighbors(level, pos):
     neighbors = []
     for move in [-1, 0, 1]:
-        # print(move)
-        # print(pos[0] + move)
-        # print(pos[1] + 1)
-        # print(level[4][4])
         neighbor = level[pos[0] + move][pos[1] + 1]
         if neighbor is " ":
             neighbors.append((pos[0] + move, pos[1] + 1 ))
@@ -34,10 +27,7 @@ def has_valid_path(level, pos):
             heu = game_width - current_pos_x
             next = (heu, next_pos)
             if next not in visited:
-                heappush(queue, next)
-            # else:
-            #     # print("WTF")
-    
+                heappush(queue, next)   
     return False
 
 
