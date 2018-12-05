@@ -20,7 +20,7 @@ initial_pos = [10, 3]
 
 
 # xxxx
-# xxxx
+# xxxx 
 # xxxx 
 
 def clear():
@@ -30,22 +30,22 @@ def clear():
 def random_obstacles(items, prob, amount):
     return random.choices(population=items, weights=prob, k=amount)
 
-def init_designer():
-    #create designer genome, can add more parameters
-    designer_genome = { "element_number": random.randint(20, 100),
-                        "walls_weight": [random.randint(1, 4), random.randint(1, 4), random.randint(1, 4), random.randint(1, 4)],
-                        "prob_floating_wall": random.randint(1, 20) }
-    return designer_genome
+# def init_designer():
+#     #create designer genome, can add more parameters
+#     designer_genome = { "ge": [],
+#                         "prob_floating_wall": random.randint(1, 20) }
+#     for i in range(random.randint(20, 100)):
+#         designer_genome["ge"].append(( random.choice(["1_lo_wall", "2_hi_wall"]), random.randint(3, 5), random.randint(7, 14) ) )
+#     return designer_genome
 
 
-def generate_obstacles(designer):
-    #the designer will generate a list of random DE following the format (type, width, height, posX)
-    #still random so the levels the same designer creates still has variety 
-    elt_num = designer["element_number"]
-    ge = [random.choice([("1_lo_tall_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)), 
-                         ("2_hi_tall_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)),
+def generate_obstacles():
+    elt_num = random.randint(20, 100)
+    ge = [random.choice([("1_lo_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)), 
+                         ("2_hi_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)),
                          ("3_lo_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
-                         ("4_hi_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5))]) for i in range(elt_num)]
+                         ("4_hi_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
+                         ("5_dust", random.randint(1, 3), random.randint(1, 3), (random.randint(1, 16), random.randint(10, map_width - 5)))]) for i in range(elt_num)]
     return ge
 
 def level_metrices():
@@ -62,17 +62,20 @@ def transform_levels(ge, levels):
             for h in range(len(levels)-height, len(levels)-1):
                 for w in range(pos, pos+width):
                     levels[h][w] = "x"
-        else:
+        elif item[0][0] in ["2", "4"]:
             for h in range(1, height):
                 for w in range(pos, pos+width):
                     levels[h][w] = "x"
+        else:
+            for h in range( height ):
+                for w in range( width ):
+                    levels[pos[0] + h][pos[1] + w] = "x"
                    
-def init_levels(designer):
-    prob = designer["prob_floating_wall"] / 1000
-    levels = [random_obstacles([" ", "x"], [1 - prob, prob], map_width) for row in range(map_height)]
+def init_levels():
+    levels = [[" " for col in range(map_width)] for row in range(map_height)]
     levels[map_height-1][:] = "-" * map_width
     levels[0][:] = "-" * map_width
-    ge = generate_obstacles(designer)
+    ge = generate_obstacles()
     transform_levels(ge, levels)
     #print(ge)
     return levels
@@ -80,7 +83,7 @@ def init_levels(designer):
 
 def random_behavior(pos):
     #just a placeholder for player behavior, should be replaced by Tyler's BT
-    return max(min(map_height-2, pos+random.randint(-1, 1)), 1)
+    return max(min(map_height-2, pos+random.randint(-2, 2)), 1)
 
 
 def simulation(level, verbose):
@@ -89,12 +92,13 @@ def simulation(level, verbose):
     #return the distance it has travelled
     player_pos = initial_pos
     scroll_offset = 0
+    success, failure = 1.0, 0.0
     while scroll_offset < map_width - 1:
         #check if the player has hit obstacle, end game accordingly 
         scroll_offset+=1
         player_pos[0] = random_behavior(player_pos[0])
         if level[player_pos[0]][player_pos[1] + scroll_offset] is "x":
-            return scroll_offset
+            return failure, scroll_offset
         if verbose is True:
             str = ""
             for i in range(game_height):  
@@ -107,7 +111,7 @@ def simulation(level, verbose):
             print(str)
             sleep(SLEEP_TIME)
     #if successfully complete the map, return a large number
-    return 10000
+    return success, map_width
 
 def level_to_file(level, file):
     for row in level:
@@ -117,28 +121,20 @@ def level_to_file(level, file):
 
 if __name__ == "__main__":
     clear()
-    sample_size = 2
-    designers = [init_designer() for i in range(sample_size)]
+    sample_size = 10
     results = []
-    for designer in designers:
-        levels = [init_levels(designer) for i in range(100)]
-        
-        now = time.strftime("%m_%d_%H_%M_%S")
-        designer_result = ["designer" + str(designers.index(designer)) + ":"]
-        # designer_result.append(designer)
-        dis, sov = 0, 0
-        for level in levels:
-            travel_distance = simulation(level, verbose=False)
-            solvability = level_fitness.metrices(level, initial_pos)
-            # designer_result.append((travel_distance, solvability))
-            dis += travel_distance
-            sov += solvability
-            if len(argv) > 1: #(print)
-                with open("levels/" + now + "_" + str(levels.index(level)) + ".txt", 'w') as f:
-                    level_to_file(level, f)
-        
-        designer_result.append("average distance: " + str(dis/10) + ", average sov: " + str(sov/10))
-        results.append(designer_result)
+    levels = [init_levels() for i in range(sample_size)]
+    
+    now = time.strftime("%m_%d_%H_%M_%S")
+    success_rate = 0
+    for level in levels:
+        success, travel_distance = simulation(level, verbose=False)
+        success_rate += success
+        solvability = level_fitness.metrices(level)
+        if len(argv) > 1: #(print)
+            with open("levels/" + now + "_" + str(levels.index(level)) + ".txt", 'w') as f:
+                level_to_file(level, f)
+        results.append((levels.index(level), travel_distance, solvability))
     print(results)
 
         
