@@ -83,10 +83,10 @@ def init_levels():
 
 def random_behavior(pos):
     #just a placeholder for player behavior, should be replaced by Tyler's BT
-    return max(min(map_height-2, pos+random.randint(-2, 2)), 1)
+    return random.randint(-2, 2)
 
 
-def simulation(level, verbose):
+def simulation(level, player, verbose):
     #run fast simulation 
     #set verbose to True to print out the process
     #return the distance it has travelled
@@ -96,10 +96,10 @@ def simulation(level, verbose):
     while scroll_offset < map_width - 1:
         #check if the player has hit obstacle, end game accordingly 
         scroll_offset+=1
-        player_pos[0] = random_behavior(player_pos[0])
+        player_pos[0] = max(min(map_height-2, player_pos[0]+ player(player_pos[0])), 1)
         if level[player_pos[0]][player_pos[1] + scroll_offset] is "x":
             return failure, scroll_offset
-        if verbose is True:
+        if verbose:
             str = ""
             for i in range(game_height):  
                 for j in range(game_width):
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     now = time.strftime("%m_%d_%H_%M_%S")
     success_rate = 0
     for level in levels:
-        success, travel_distance = simulation(level, verbose=False)
+        success, travel_distance = simulation(level, random_behavior, verbose=True)
         success_rate += success
         solvability = level_fitness.metrices(level)
         if len(argv) > 1: #(print)
