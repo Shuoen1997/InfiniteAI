@@ -7,6 +7,7 @@ import random
 import keyboard
 import time
 import level_fitness
+import PlayerGA
 
 
 OKGREEN = '\033[92m'
@@ -47,9 +48,6 @@ def generate_obstacles():
                          ("4_hi_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
                          ("5_dust", random.randint(1, 3), random.randint(1, 3), (random.randint(1, 16), random.randint(10, map_width - 5)))]) for i in range(elt_num)]
     return ge
-
-def level_metrices():
-    pass
 
 
 def transform_levels(ge, levels):
@@ -98,7 +96,7 @@ def simulation(level, player, verbose):
         scroll_offset+=1
         player_pos[0] = max(min(map_height-2, player_pos[0]+ player(player_pos[0])), 1)
         if level[player_pos[0]][player_pos[1] + scroll_offset] is "x":
-            return failure, scroll_offset
+            return failure,
         if verbose:
             str = ""
             for i in range(game_height):  
@@ -111,24 +109,26 @@ def simulation(level, player, verbose):
             print(str)
             sleep(SLEEP_TIME)
     #if successfully complete the map, return a large number
-    return success, map_width
+    return success, 
 
 def level_to_file(level, file):
     for row in level:
         file.write("".join(row) + "\n")
 
-
+def init_players():
+    return PlayerGA.Individual(PlayerGA.Individual.create_gnome())
 
 if __name__ == "__main__":
     clear()
     sample_size = 10
     results = []
     levels = [init_levels() for i in range(sample_size)]
-    
+    players = [init_players() for i in range(sample_size)]
+    print(players[0].chromosome)
     now = time.strftime("%m_%d_%H_%M_%S")
     success_rate = 0
     for level in levels:
-        success, travel_distance = simulation(level, random_behavior, verbose=True)
+        success, travel_distance = simulation(level, random_behavior, verbose=False)
         success_rate += success
         solvability = level_fitness.metrices(level)
         if len(argv) > 1: #(print)
