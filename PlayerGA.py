@@ -13,7 +13,7 @@ GENES = [(is_obstacle_in_way, move_forward), (is_obstacle_in_way, move_random_ve
 
 G_LENGTH = 1
 
-POPULATION_SIZE = 20
+POPULATION_SIZE = 10
 
 class Individual(object):
 
@@ -112,8 +112,10 @@ def main():
 
         generation += 1
 
-    item = population[0].chromosome
-    print(item)
+    #Item is a function
+    item = (population[0].chromosome)[0][0]
+    #Executes first behavior function
+    item()
 
 
 if __name__ == '__main__':
