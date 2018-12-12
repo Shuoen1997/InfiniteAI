@@ -1,2 +1,3 @@
 def is_obstacle_in_way(pos):
-    return False
+    print("in obstacle in way")
+    return True

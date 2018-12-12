@@ -12,7 +12,7 @@ def player_behavior_tree():
     obstacle_check = Check(is_obstacle_in_way)
     random_move = Action(move_random_vert)
 
-    move_strategy.child_nodes = [obstacle_check, random_move]
-    root.child_nodes = [move_strategy, move_forward]
+    move_strategy.child_nodes = [random_move]
+    root.child_nodes = [move_strategy]
 
     return root

@@ -8,6 +8,7 @@ import keyboard
 import time
 import level_fitness
 import PlayerGA
+from player_bot import *
 
 
 OKGREEN = '\033[92m'
@@ -79,24 +80,25 @@ def init_levels():
     return levels
 
 
-def random_behavior(pos):
+def random_behavior():
     #just a placeholder for player behavior, should be replaced by Tyler's BT
     return random.randint(-2, 2)
 
 
-def simulation(level, player, verbose):
+def simulation(level, pb, verbose):
     #run fast simulation 
     #set verbose to True to print out the process
     #return the distance it has travelled
-    player_pos = initial_pos
+    player_pos = initial_pos # (y, x)
     scroll_offset = 0
     success, failure = 1.0, 0.0
     while scroll_offset < map_width - 1:
         #check if the player has hit obstacle, end game accordingly 
-        scroll_offset+=1
-        player_pos[0] = max(min(map_height-2, player_pos[0]+ player(player_pos[0])), 1)
+        pb(player_pos[0])
+        scroll_offset +=1
+        
         if level[player_pos[0]][player_pos[1] + scroll_offset] is "x":
-            return failure,
+            return failure, scroll_offset
         if verbose:
             str = ""
             for i in range(game_height):  
@@ -109,7 +111,7 @@ def simulation(level, player, verbose):
             print(str)
             sleep(SLEEP_TIME)
     #if successfully complete the map, return a large number
-    return success, 
+    return success, map_width
 
 def level_to_file(level, file):
     for row in level:
@@ -128,13 +130,16 @@ if __name__ == "__main__":
     now = time.strftime("%m_%d_%H_%M_%S")
     success_rate = 0
     for level in levels:
-        success, travel_distance = simulation(level, random_behavior, verbose=False)
-        success_rate += success
-        solvability = level_fitness.metrices(level)
-        if len(argv) > 1: #(print)
-            with open("levels/" + now + "_" + str(levels.index(level)) + ".txt", 'w') as f:
-                level_to_file(level, f)
-        results.append((levels.index(level), travel_distance, solvability))
+        for player in players:
+            print(player.chromosome)
+            player_behavior = player_behavior_tree()
+            success, travel_distance = simulation(level, player_behavior.execute, verbose=False)
+            success_rate += success
+            solvability = level_fitness.metrices(level)
+            if len(argv) > 1: #(print)
+                with open("levels/" + now + "_" + str(levels.index(level)) + ".txt", 'w') as f:
+                    level_to_file(level, f)
+            results.append((levels.index(level), travel_distance, solvability))
     print(results)
 
         
