@@ -7,18 +7,18 @@ import random
 import keyboard
 import time
 import level_fitness
-import PlayerGA
 from player_bot import *
-
+from PlayerGA import *
 
 OKGREEN = '\033[92m'
 ENDC = '\033[0m'
 SLEEP_TIME = 0.5
 map_height = 20
-map_width = 480
+map_width = 200
 game_height = 20
 game_width = 120
-initial_pos = [10, 3]
+player_x = 3
+player_y = 0
 
 
 # xxxx
@@ -50,6 +50,9 @@ def generate_obstacles():
                          ("5_dust", random.randint(1, 3), random.randint(1, 3), (random.randint(1, 16), random.randint(10, map_width - 5)))]) for i in range(elt_num)]
     return ge
 
+def level_metrices():
+    pass
+
 
 def transform_levels(ge, levels):
     #transform the DE into actual array elements
@@ -79,31 +82,34 @@ def init_levels():
     #print(ge)
     return levels
 
+def init_players():
+    return Individual(Individual.create_gnome())
 
-def random_behavior():
+def random_behavior(pos):
     #just a placeholder for player behavior, should be replaced by Tyler's BT
     return random.randint(-2, 2)
 
 
-def simulation(level, pb, verbose):
+def simulation(level, player, verbose):
     #run fast simulation 
     #set verbose to True to print out the process
     #return the distance it has travelled
-    player_pos = initial_pos # (y, x)
+    player_pos = [player_y]
     scroll_offset = 0
     success, failure = 1.0, 0.0
-    while scroll_offset < map_width - 1:
+    while scroll_offset < game_width - 1:
         #check if the player has hit obstacle, end game accordingly 
-        pb(player_pos[0])
-        scroll_offset +=1
-        
-        if level[player_pos[0]][player_pos[1] + scroll_offset] is "x":
+        scroll_offset+=1
+        print(player(player_pos))
+        # player_pos = max(min(map_height-2, player_pos + random.randint(-2, 2)), 1)
+        # player_pos = player(player_pos)
+        if level[player_pos[0]][player_x + scroll_offset] is "x":
             return failure, scroll_offset
         if verbose:
             str = ""
             for i in range(game_height):  
                 for j in range(game_width):
-                    if i!=player_pos[0] or j!=player_pos[1]:
+                    if i!=player_pos[0] or j!=player_x:
                         str+=level[i][j+scroll_offset]
                     else:
                         str+=OKGREEN+"o"+ENDC
@@ -117,23 +123,21 @@ def level_to_file(level, file):
     for row in level:
         file.write("".join(row) + "\n")
 
-def init_players():
-    return PlayerGA.Individual(PlayerGA.Individual.create_gnome())
+
 
 if __name__ == "__main__":
     clear()
-    sample_size = 10
+    sample_size = 2
     results = []
     levels = [init_levels() for i in range(sample_size)]
     players = [init_players() for i in range(sample_size)]
-    print(players[0].chromosome)
     now = time.strftime("%m_%d_%H_%M_%S")
     success_rate = 0
     for level in levels:
         for player in players:
-            print(player.chromosome)
-            player_behavior = player_behavior_tree()
-            success, travel_distance = simulation(level, player_behavior.execute, verbose=False)
+            player_behavior = player_behavior_tree(player.chromosome)
+            print(player_behavior)
+            success, travel_distance = simulation(level, player_behavior.execute, verbose=True)
             success_rate += success
             solvability = level_fitness.metrices(level)
             if len(argv) > 1: #(print)
