@@ -1,5 +1,6 @@
 import random
-
+from checks import *
+from behaviors import *
 # def is_obstacle_in_way():
 #     print("in obstacle in way")
 #     return True
@@ -10,20 +11,8 @@ import random
 # def move_random_vert():
 #     print("Moving to random vertical")
 map_height = 20
-def move_random_vert(player_pos):
-    # return random.randint(-1, 1)
-    player_pos[0] = max(min(map_height-2, player_pos[0] + random.randint(-4, 4)), 1)
-    print("in_move_random")
-    return True
+map_width = 240
 
-def move_alittle(player_pos):
-    player_pos[0] = max(min(map_height-2, player_pos[0] + random.randint(-1, 1)), 1)
-    print("in_move_alittle")
-    return True
-
-def is_obstacle_in_way(player_pos):
-    print("in obstacle in way")
-    return True
 
 # GENES = [(is_obstacle_in_way, stay), (is_obstacle_in_way, move_random_vert)]
 GENES = [(is_obstacle_in_way, move_random_vert), (is_obstacle_in_way, move_alittle)]

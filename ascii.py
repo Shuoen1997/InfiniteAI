@@ -9,12 +9,13 @@ import time
 import level_fitness
 from player_bot import *
 from PlayerGA import *
+from levelGA import *
 
 OKGREEN = '\033[92m'
 ENDC = '\033[0m'
 SLEEP_TIME = 0.5
 map_height = 20
-map_width = 200
+map_width = 240
 game_height = 20
 game_width = 120
 player_x = 3
@@ -41,49 +42,13 @@ def random_obstacles(items, prob, amount):
 #     return designer_genome
 
 
-def generate_obstacles():
-    elt_num = random.randint(20, 100)
-    ge = [random.choice([("1_lo_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)), 
-                         ("2_hi_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)),
-                         ("3_lo_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
-                         ("4_hi_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
-                         ("5_dust", random.randint(1, 3), random.randint(1, 3), (random.randint(1, 16), random.randint(10, map_width - 5)))]) for i in range(elt_num)]
-    return ge
 
-def level_metrices():
-    pass
-
-
-def transform_levels(ge, levels):
-    #transform the DE into actual array elements
-    for item in ge:
-        pos = item[3]
-        height = item[2]
-        width = item[1]
-        if item[0][0] in ["1", "3"]:
-            for h in range(len(levels)-height, len(levels)-1):
-                for w in range(pos, pos+width):
-                    levels[h][w] = "x"
-        elif item[0][0] in ["2", "4"]:
-            for h in range(1, height):
-                for w in range(pos, pos+width):
-                    levels[h][w] = "x"
-        else:
-            for h in range( height ):
-                for w in range( width ):
-                    levels[pos[0] + h][pos[1] + w] = "x"
-                   
-def init_levels():
-    levels = [[" " for col in range(map_width)] for row in range(map_height)]
-    levels[map_height-1][:] = "-" * map_width
-    levels[0][:] = "-" * map_width
-    ge = generate_obstacles()
-    transform_levels(ge, levels)
-    #print(ge)
-    return levels
 
 def init_players():
     return Individual(Individual.create_gnome())
+
+def init_levels():
+    return Level()
 
 def random_behavior(pos):
     #just a placeholder for player behavior, should be replaced by Tyler's BT
@@ -96,7 +61,6 @@ def simulation(level, player, verbose):
     #return the distance it has travelled
     player_pos = [player_y]
     scroll_offset = 0
-    success, failure = 1.0, 0.0
     while scroll_offset < game_width - 1:
         #check if the player has hit obstacle, end game accordingly 
         scroll_offset+=1
@@ -104,7 +68,7 @@ def simulation(level, player, verbose):
         # player_pos = max(min(map_height-2, player_pos + random.randint(-2, 2)), 1)
         # player_pos = player(player_pos)
         if level[player_pos[0]][player_x + scroll_offset] is "x":
-            return failure, scroll_offset
+            return scroll_offset
         if verbose:
             str = ""
             for i in range(game_height):  
@@ -117,7 +81,7 @@ def simulation(level, player, verbose):
             print(str)
             sleep(SLEEP_TIME)
     #if successfully complete the map, return a large number
-    return success, map_width
+    return map_width
 
 def level_to_file(level, file):
     for row in level:
@@ -127,23 +91,23 @@ def level_to_file(level, file):
 
 if __name__ == "__main__":
     clear()
-    sample_size = 2
+    sample_size = 20
     results = []
-    levels = [init_levels() for i in range(sample_size)]
-    players = [init_players() for i in range(sample_size)]
+    level_population = [init_levels() for i in range(sample_size)]
+    level_population = sorted(level_population, key=lambda x: x.fitness)
+    player_population = [init_players() for i in range(sample_size)]
+    generation = 0
     now = time.strftime("%m_%d_%H_%M_%S")
-    success_rate = 0
-    for level in levels:
-        for player in players:
-            player_behavior = player_behavior_tree(player.chromosome)
-            print(player_behavior)
-            success, travel_distance = simulation(level, player_behavior.execute, verbose=True)
-            success_rate += success
-            solvability = level_fitness.metrices(level)
-            if len(argv) > 1: #(print)
-                with open("levels/" + now + "_" + str(levels.index(level)) + ".txt", 'w') as f:
-                    level_to_file(level, f)
-            results.append((levels.index(level), travel_distance, solvability))
+    while True:
+        for level in level_population:
+            for player in player_population:
+                player_behavior = player_behavior_tree(player.chromosome)
+                print(player_behavior)
+                travel_distance = simulation(level.chromosome, player_behavior.execute, verbose=True)
+                # if len(argv) > 1: #(print)
+                #     with open("levels/" + now + "_" + str(level_population.index(level)) + ".txt", 'w') as f:
+                #         level_to_file(level, f)
+                results.append((level_population.index(level), travel_distance, solvability))
     print(results)
 
         
