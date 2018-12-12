@@ -83,17 +83,18 @@ if __name__ == "__main__":
                 # print(player_behavior)
                 travel_distance = simulation(level.chromosome, player_behavior.execute, verbose=False)
                 # calculate the fitness 
+                print(player.fitness)
                 player.fitness += ( travel_distance / map_width ) / sample_size
                 level.fitness += ( travel_distance / map_width ) / sample_size
          
-
+        #NEED TO CHAGNE to prioritizing a percentage 
         level_population = sorted(level_population, key=lambda x: x.fitness)
         player_population = sorted(player_population, key=lambda x: x.fitness)
         
         # if the individual having lowest fitness score ie.
         # 0 then we know that we have reached to the target
         # and break the loop
-        if player_population[0].fitness >= 0.8:
+        if generation > 8:
             break
 
         # if the individual having lowest fitness score ie.

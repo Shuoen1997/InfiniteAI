@@ -9,8 +9,7 @@ def player_behavior_tree(genome):
         this_sequence = Sequence(name="sequence")
         this_sequence.child_nodes = [Check(ge[0]), Action(ge[1])]
         root.child_nodes.append(this_sequence)
-
     
     # print("in player behavior tree")
-    print(root.child_nodes)
+    
     return root

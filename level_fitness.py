@@ -3,6 +3,24 @@ from heapq import heappush, heappop
 def metrices(level):
     return has_valid_path(level)
 
+
+def has_valid_path(level):
+    game_width = len(level[0])
+    for w in range(game_width):
+        if not passable(level, 1, w):
+            return 0.0
+    return 1.0
+
+def passable(level, h, w):
+    while h < len(level)-1:
+        if level[h][w] is "x":
+            h+=1
+        else:
+            return True
+    return False
+        
+        
+
 # def get_neighbors(level, pos):
 #     neighbors = []
 #     for move in [-1, 0, 1]:
@@ -29,20 +47,3 @@ def metrices(level):
 #             if next not in visited:
 #                 heappush(queue, next)   
 #     return 0.0
-def has_valid_path(level):
-    game_width = len(level[0])
-    for w in range(game_width):
-        if not passable(level, 1, w):
-            return 0.0
-    return 1.0
-
-def passable(level, h, w):
-    while h < len(level)-1:
-        if level[h][w] is "x":
-            h+=1
-        else:
-            return True
-    return False
-        
-        
-
