@@ -56,3 +56,14 @@ def transform_levels(ge, levels):
                 for w in range( width ):
                     levels[pos[0] + h][pos[1] + w] = "x"
                    
+# def init_designer():
+#     #create designer genome, can add more parameters
+#     designer_genome = { "ge": [],
+#                         "prob_floating_wall": random.randint(1, 20) }
+#     for i in range(random.randint(20, 100)):
+#         designer_genome["ge"].append(( random.choice(["1_lo_wall", "2_hi_wall"]), random.randint(3, 5), random.randint(7, 14) ) )
+#     return designer_genome
+
+
+# def random_obstacles(items, prob, amount):
+#     return random.choices(population=items, weights=prob, k=amount)
