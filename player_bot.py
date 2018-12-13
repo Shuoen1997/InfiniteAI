@@ -3,14 +3,14 @@ from checks import *
 from bt_nodes import Selector, Sequence, Action, Check
 
 def player_behavior_tree(genome):
-    root = Sequence(name='Root')
-    # move_strategy = Sequence(name = 'Move Strategy')
+    root = Selector(name='Root')
+
     for ge in genome:
         this_sequence = Sequence(name="sequence")
+        stay_action = Action(do_nothing)
         this_sequence.child_nodes = [Check(ge[0]), Action(ge[1])]
-        root.child_nodes.append(this_sequence)
+        root.child_nodes = [this_sequence, stay_action]
 
-    
-    # print("in player behavior tree")
-    print(root.child_nodes)
+
+    #print("in player behavior tree")
     return root

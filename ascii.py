@@ -1,7 +1,7 @@
 from os import system, name
 from colorama import Fore, Style
 from msvcrt import getch
-from sys import argv 
+from sys import argv
 from time import sleep
 import random
 import time
@@ -9,6 +9,7 @@ import level_fitness
 from player_bot import *
 from PlayerGA import *
 from levelGA import *
+import checks
 
 OKGREEN = '\033[92m'
 ENDC = '\033[0m'
@@ -22,8 +23,8 @@ player_y = 0
 
 
 # xxxx
-# xxxx 
-# xxxx 
+# xxxx
+# xxxx
 
 def init_players():
     return Individual(Individual.create_gnome())
@@ -33,20 +34,22 @@ def init_levels():
 
 
 def simulation(level, player, verbose):
-    #run fast simulation 
+    #run fast simulation
     #set verbose to True to print out the process
     #return the distance it has travelled
+    checks.level = level
+    checks.player_x = player_x
     player_pos = [player_y]
     scroll_offset = 0
     while scroll_offset < game_width - 1:
-        #check if the player has hit obstacle, end game accordingly 
+        #check if the player has hit obstacle, end game accordingly
         scroll_offset+=1
         player(player_pos)
         if level[player_pos[0]][player_x + scroll_offset] is "x":
             return scroll_offset
         if verbose:
             str = ""
-            for i in range(game_height):  
+            for i in range(game_height):
                 for j in range(game_width):
                     if i!=player_pos[0] or j!=player_x:
                         str+=level[i][j+scroll_offset]
@@ -55,7 +58,7 @@ def simulation(level, player, verbose):
                 str+="\n"
             print(str)
             sleep(SLEEP_TIME)
-    
+
     #if successfully complete the map
     return map_width
 
@@ -71,25 +74,25 @@ def clear():
 if __name__ == "__main__":
     clear()
     sample_size = 20
-    level_population = [init_levels() for i in range(sample_size)] 
+    level_population = [init_levels() for i in range(sample_size)]
     player_population = [init_players() for i in range(sample_size)]
     generation = 0
     now = time.strftime("%m_%d_%H_%M_%S")
     while True:
-        #run through the simulation to get the fitness score 
+        #run through the simulation to get the fitness score
         for level in level_population:
             for player in player_population:
                 player_behavior = player_behavior_tree(player.chromosome)
-                # print(player_behavior)
-                travel_distance = simulation(level.chromosome, player_behavior.execute, verbose=False)
-                # calculate the fitness 
+                print("player chromosome is", player.chromosome)
+                travel_distance = simulation(level.chromosome, player_behavior.execute, verbose=True)
+                # calculate the fitness
                 player.fitness += ( travel_distance / map_width ) / sample_size
                 level.fitness += ( travel_distance / map_width ) / sample_size
-         
+
 
         level_population = sorted(level_population, key=lambda x: x.fitness)
         player_population = sorted(player_population, key=lambda x: x.fitness)
-        
+
         # if the individual having lowest fitness score ie.
         # 0 then we know that we have reached to the target
         # and break the loop
@@ -124,14 +127,10 @@ if __name__ == "__main__":
         player_population = new_player_generation
         generation += 1
 
-        
+
 
     # # if len(argv) > 1: #(print)
     # #     with open("levels/" + now + "_" + str(level_population.index(level)) + ".txt", 'w') as f:
     # #         level_to_file(level, f)
     # results.append((level_population.index(level), travel_distance))
     # print(results)
-
-        
-
-    

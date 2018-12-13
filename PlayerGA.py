@@ -15,7 +15,7 @@ map_width = 240
 
 
 # GENES = [(is_obstacle_in_way, stay), (is_obstacle_in_way, move_random_vert)]
-GENES = [(is_obstacle_in_way, move_random_vert), (is_obstacle_in_way, move_alittle)]
+GENES = [(is_obstacle_in_way, move_random_vert),(is_obstacle_in_way, variable_oscillate),(is_obstacle_in_way, fixed_oscillate),(is_obstacle_in_way, move_alittle)]
 
 G_LENGTH = 2
 
