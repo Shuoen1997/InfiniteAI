@@ -13,7 +13,7 @@ import checks
 
 OKGREEN = '\033[92m'
 ENDC = '\033[0m'
-SLEEP_TIME = 0.5
+SLEEP_TIME = 0.2
 map_height = 20
 map_width = 240
 game_height = 20
@@ -58,7 +58,7 @@ def simulation(level, player, verbose):
                         else:
                             str+=OKGREEN+"o"+ENDC
                     else:
-                        if i!=player_pos[0] or j!=scroll_offset - game_width: 
+                        if i!=player_pos[0] or j!=scroll_offset - game_width:
                             str+=level[i][j+game_width]
                         else:
                             str+=OKGREEN+"o"+ENDC
