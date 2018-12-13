@@ -19,7 +19,7 @@ map_width = 240
 game_height = 20
 game_width = 120
 player_x = 3
-player_y = 0
+player_y = 8
 
 
 # xxxx
@@ -39,12 +39,13 @@ def simulation(level, player, verbose):
     #return the distance it has travelled
     checks.level = level
     checks.player_x = player_x
-    player_pos = [player_y]
+    player_pos = [player_y, level, 0]
     scroll_offset = 0
     while scroll_offset < game_width - 1:
         #check if the player has hit obstacle, end game accordingly
         scroll_offset+=1
         player(player_pos)
+        player_pos[2] = scroll_offset
         if level[player_pos[0]][player_x + scroll_offset] is "x":
             return scroll_offset
         if verbose:
