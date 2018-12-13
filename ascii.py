@@ -85,7 +85,7 @@ if __name__ == "__main__":
             for player in player_population:
                 player_behavior = player_behavior_tree(player.chromosome)
                 print("player chromosome is", player.chromosome)
-                travel_distance = simulation(level.chromosome, player_behavior.execute, verbose=True)
+                travel_distance = simulation(level.init_level(), player_behavior.execute, verbose=True)
                 # calculate the fitness
                 player.fitness += ( travel_distance / map_width ) / sample_size
                 level.fitness += ( travel_distance / map_width ) / sample_size

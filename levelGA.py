@@ -6,7 +6,7 @@ map_width = 240
 class Level(object):
     
     def __init__(self):
-        self.chromosome = self.init_level()
+        self.chromosome = generate_obstacles()
         self.fitness = self.cal_fitness()
     
     def cal_fitness(self):
@@ -17,8 +17,7 @@ class Level(object):
         levels = [[" " for col in range(map_width)] for row in range(map_height)]
         levels[map_height-1][:] = "-" * map_width
         levels[0][:] = "-" * map_width
-        ge = generate_obstacles()
-        transform_levels(ge, levels)
+        transform_levels(self.chromosome, levels)
         #print(ge)
         return levels
 
