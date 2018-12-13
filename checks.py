@@ -4,11 +4,14 @@ map_height = 20
 #check 10 units ahead
 def is_10obstacle_in_way(player_pos):
     print("in_is_10obstacle_in_way")
-    print("running current")
+    level = player_pos[1]
     if map_width - player_pos[2] > 10:
-        print(map_width - player_pos[0])
         for i in range(0,10):
-            level = player_pos[1]
+            if level[player_pos[0]][player_pos[2] + i] is "x":
+                print("obstacle detected!")
+                return True
+    else:
+        for i in range(0,map_width-player_pos[2]):
             if level[player_pos[0]][player_pos[2] + i] is "x":
                 print("obstacle detected!")
                 return True
@@ -17,10 +20,14 @@ def is_10obstacle_in_way(player_pos):
 #check 20 units ahead
 def is_20obstacle_in_way(player_pos):
     print("in_is_20obstacle_in_way")
-    print("running current")
+    level = player_pos[1]
     if map_width - player_pos[2] > 20:
         for i in range(0,20):
-            level = player_pos[1]
+            if level[player_pos[0]][player_pos[2] + i] is "x":
+                print("obstacle detected!")
+                return True
+    else:
+        for i in range(0,map_width-player_pos[2]):
             if level[player_pos[0]][player_pos[2] + i] is "x":
                 print("obstacle detected!")
                 return True
@@ -29,10 +36,14 @@ def is_20obstacle_in_way(player_pos):
 #check 15 units ahead
 def is_15obstacle_in_way(player_pos):
     print("in_is_15obstacle_in_way")
-    print("running current")
+    level = player_pos[1]
     if map_width - player_pos[2] > 15:
         for i in range(0,15):
-            level = player_pos[1]
+            if level[player_pos[0]][player_pos[2] + i] is "x":
+                print("obstacle detected!")
+                return True
+    else:
+        for i in range(0,map_width-player_pos[2]):
             if level[player_pos[0]][player_pos[2] + i] is "x":
                 print("obstacle detected!")
                 return True
@@ -41,10 +52,14 @@ def is_15obstacle_in_way(player_pos):
 #check 5 units ahead
 def is_5obstacle_in_way(player_pos):
     print("in_is_5obstacle_in_way")
-    print("running current")
+    level = player_pos[1]
     if map_width - player_pos[2] > 5:
         for i in range(0,5):
-            level = player_pos[1]
+            if level[player_pos[0]][player_pos[2] + i] is "x":
+                print("obstacle detected!")
+                return True
+    else:
+        for i in range(0,map_width-player_pos[2]):
             if level[player_pos[0]][player_pos[2] + i] is "x":
                 print("obstacle detected!")
                 return True
