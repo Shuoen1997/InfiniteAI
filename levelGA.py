@@ -26,8 +26,8 @@ class Level(object):
 
 def generate_obstacles():
     elt_num = random.randint(20, 100)
-    ge = [random.choice([("1_lo_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)), 
-                         ("2_hi_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)),
+    ge = [random.choice([("1_lo_wall", random.randint(1, 4), random.randint(5, 8), random.randint(10, map_width-5)), 
+                         ("2_hi_wall", random.randint(1, 4), random.randint(5, 8), random.randint(10, map_width-5)),
                          ("3_lo_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
                          ("4_hi_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
                          ("5_dust", random.randint(1, 3), random.randint(1, 3), (random.randint(1, 16), random.randint(10, map_width - 5)))]) for i in range(elt_num)]

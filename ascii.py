@@ -41,7 +41,7 @@ def simulation(level, player, verbose):
     checks.player_x = player_x
     player_pos = [player_y, level, 0]
     scroll_offset = 0
-    while scroll_offset < game_width - 1:
+    while scroll_offset < map_width - 4:
         #check if the player has hit obstacle, end game accordingly
         scroll_offset+=1
         player(player_pos)
@@ -52,10 +52,16 @@ def simulation(level, player, verbose):
             str = ""
             for i in range(game_height):
                 for j in range(game_width):
-                    if i!=player_pos[0] or j!=player_x:
-                        str+=level[i][j+scroll_offset]
+                    if scroll_offset < game_width:
+                        if i!=player_pos[0] or j!=player_x:
+                            str+=level[i][j+scroll_offset]
+                        else:
+                            str+=OKGREEN+"o"+ENDC
                     else:
-                        str+=OKGREEN+"o"+ENDC
+                        if i!=player_pos[0] or j!=scroll_offset - game_width: 
+                            str+=level[i][j+game_width]
+                        else:
+                            str+=OKGREEN+"o"+ENDC
                 str+="\n"
             print(str)
             sleep(SLEEP_TIME)
@@ -84,11 +90,12 @@ if __name__ == "__main__":
         for level in level_population:
             for player in player_population:
                 player_behavior = player_behavior_tree(player.chromosome)
-                print("player chromosome is", player.chromosome)
+                # print("player chromosome is", player.chromosome)
                 travel_distance = simulation(level.init_level(), player_behavior.execute, verbose=True)
                 # calculate the fitness
                 player.fitness += ( travel_distance / map_width ) / sample_size
                 level.fitness += ( travel_distance / map_width ) / sample_size
+                print(level.fitness)
 
 
         level_population = sorted(level_population, key=lambda x: x.fitness)
