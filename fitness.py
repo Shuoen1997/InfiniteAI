@@ -1,16 +1,19 @@
 from heapq import heappush, heappop
 from sim import *
 from player_bot import *
+from math import pow
+
+ipr = 0.6
 
 def level_metrices(level, player_pop):
     success = 0
     for player in player_pop:
         player_behavior = player_behavior_tree(player.chromosome)
         distance_travelled = simulation(level, player_behavior.execute, verbose=False)
-        if distance_travelled > map_width:
+        if distance_travelled > map_width - 4:
             success +=1
     pass_rate = success / len(player_pop)
-    return 0.5 * has_valid_path(level) + 0.5 * pass_rate
+    return 1 * has_valid_path(level) + 10 * abs(ipr - pass_rate) 
 
 def player_metrices(player, level_pop):
     overall_travel_dis = 0
@@ -27,8 +30,8 @@ def has_valid_path(level):
     game_width = len(level[0])
     for w in range(game_width):
         if not passable(level, 1, w):
-            return -999.0
-    return 1.0
+            return 999.0
+    return 0.0
 
 def passable(level, h, w):
     while h < len(level)-1:

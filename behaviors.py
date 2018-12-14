@@ -48,14 +48,14 @@ def do_nothing(player_pos):
 
 #if is_top_opening check returns true
 def move_top_opening(player_pos):
-    print("in_move_top_opening")
-    print("opening pos is",opening_pos)
+    # print("in_move_top_opening")
+    # print("opening pos is",opening_pos)
     player_pos[0] = opening_pos[0]
     return True
 
 #if is_bottom_opening check returns true
 def move_bottom_opening(player_pos):
-    print("in_move_bottom_opening")
-    print("opeing pos is",opening_pos)
+    # print("in_move_bottom_opening")
+    # print("opeing pos is",opening_pos)
     player_pos[0] = opening_pos[0]
     return True

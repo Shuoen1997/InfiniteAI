@@ -12,7 +12,7 @@ def player_behavior_tree(genome):
 
         #smart_selection
         if ge[1] == "smart_selection":
-            print("smart_select")
+            # print("smart_select")
             smart_selection = Selector(name="smart_select")
             top_check_sequence= Sequence(name="top_sequence")
             bot_check_sequence= Sequence(name="bot_sequence")
