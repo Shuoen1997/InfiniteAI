@@ -9,11 +9,14 @@ from PlayerGA import *
 from levelGA import *
 from player_bot import *
 
+
+
+
 def init_players():
     return Individual(Individual.create_gnome())
 
 def init_levels():
-    return Level()
+    return Level(Level.create_genome())
 
 def level_to_file(level, file):
     for row in level:
@@ -66,10 +69,18 @@ if __name__ == "__main__":
         # will mate to produce offspring
         s = int((90 * sample_size) / 100)
         for _ in range(s):
-            parent1 = random.choice(player_population[:50])
-            parent2 = random.choice(player_population[:50])
-            child = parent1.mate(parent2)
-            new_player_generation.append(child)
+            p_parent1 = random.choice(player_population[:5])
+            p_parent2 = random.choice(player_population[:5])
+            p_child = p_parent1.mate(p_parent2)
+            new_player_generation.append(p_child)
+
+        for _ in range(s):
+            l_parent1 = random.choice(level_population[:5])
+            l_parent2 = random.choice(level_population[:5])
+            l_child = l_parent1.mate(l_parent2)
+            new_level_generation.append(l_child)
+
 
         player_population = new_player_generation
+        level_population = new_level_generation
         generation += 1

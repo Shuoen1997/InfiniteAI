@@ -1,7 +1,7 @@
 import random
 from checks import *
 from behaviors import *
-from level_fitness import player_metrices
+from fitness import player_metrices
 # def is_obstacle_in_way():
 #     print("in obstacle in way")
 #     return True
