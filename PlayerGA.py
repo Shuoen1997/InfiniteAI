@@ -108,8 +108,8 @@ def main():
         # will mate to produce offspring
         s = int((90 * POPULATION_SIZE) / 100)
         for _ in range(s):
-            parent1 = random.choice(population[:50])
-            parent2 = random.choice(population[:50])
+            parent1 = random.choice(population[:5])
+            parent2 = random.choice(population[:5])
             child = parent1.mate(parent2)
             new_generation.append(child)
 
