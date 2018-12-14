@@ -18,7 +18,7 @@ GENES = [(is_10obstacle_in_way, move_random_vert),(is_10obstacle_in_way, variabl
 
 G_LENGTH = 2
 
-POPULATION_SIZE = 20
+POPULATION_SIZE = 10
 
 class Individual(object):
 
@@ -88,13 +88,7 @@ def main():
 
         # sort the population in increasing order of fitness score
         population = sorted(population, key=lambda x: x.fitness)
-
-        # if the individual having lowest fitness score ie.
-        # 0 then we know that we have reached to the target
-        # and break the loop
-        if population[0].fitness <= 0:
-            found = True
-            break
+        population.reverse()
 
         # Otherwise generate new offsprings for new generation
         new_generation = []
@@ -108,8 +102,8 @@ def main():
         # will mate to produce offspring
         s = int((90 * POPULATION_SIZE) / 100)
         for _ in range(s):
-            parent1 = random.choice(population[:50])
-            parent2 = random.choice(population[:50])
+            parent1 = random.choice(population[:5])
+            parent2 = random.choice(population[:5])
             child = parent1.mate(parent2)
             new_generation.append(child)
 
@@ -118,8 +112,8 @@ def main():
 
         generation += 1
 
-    item = population[0].chromosome
-    print(item)
+    #item = population[0].chromosome
+    #print(item)
 
 
 if __name__ == '__main__':
