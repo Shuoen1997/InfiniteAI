@@ -7,11 +7,12 @@ class Level(object):
     
     def __init__(self):
         self.chromosome = generate_obstacles()
-        self.fitness = self.cal_fitness()
+        self.fitness = None
     
-    def cal_fitness(self):
+    def cal_fitness(self, player_pop):
         
-        return metrices(self.chromosome)
+        self.fitness = level_metrices(self.init_level(), player_pop)
+        return self.fitness
     
     def init_level(self):
         levels = [[" " for col in range(map_width)] for row in range(map_height)]
@@ -21,13 +22,12 @@ class Level(object):
         #print(ge)
         return levels
 
-    
-    
+
 
 def generate_obstacles():
     elt_num = random.randint(20, 100)
-    ge = [random.choice([("1_lo_wall", random.randint(1, 4), random.randint(5, 8), random.randint(10, map_width-5)), 
-                         ("2_hi_wall", random.randint(1, 4), random.randint(5, 8), random.randint(10, map_width-5)),
+    ge = [random.choice([("1_lo_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)), 
+                         ("2_hi_wall", random.randint(1, 4), random.randint(5, 12), random.randint(10, map_width-5)),
                          ("3_lo_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
                          ("4_hi_short_wall", random.randint(1, 4), random.randint(2, 5), random.randint(10, map_width-5)),
                          ("5_dust", random.randint(1, 3), random.randint(1, 3), (random.randint(1, 16), random.randint(10, map_width - 5)))]) for i in range(elt_num)]

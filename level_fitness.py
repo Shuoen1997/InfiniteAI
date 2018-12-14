@@ -1,8 +1,44 @@
 from heapq import heappush, heappop
+from sim import *
+from player_bot import *
 
-def metrices(level):
-    return has_valid_path(level)
+def level_metrices(level, player_pop):
+    success = 0
+    for player in player_pop:
+        player_behavior = player_behavior_tree(player.chromosome)
+        distance_travelled = simulation(level, player_behavior.execute, verbose=False)
+        if distance_travelled > map_width:
+            success +=1
+    pass_rate = success / len(player_pop)
+    return 0.5 * has_valid_path(level) + 0.5 * pass_rate
 
+def player_metrices(player, level_pop):
+    overall_travel_dis = 0
+    player_behavior = player_behavior_tree(player.chromosome)
+    for level in level_pop:
+        distance_travelled = simulation(level.init_level(), player_behavior.execute, verbose=False)
+        overall_travel_dis += distance_travelled
+    
+    pass_cap = overall_travel_dis / map_width * len(level_pop) 
+    return pass_cap
+
+
+def has_valid_path(level):
+    game_width = len(level[0])
+    for w in range(game_width):
+        if not passable(level, 1, w):
+            return -999.0
+    return 1.0
+
+def passable(level, h, w):
+    while h < len(level)-1:
+        if level[h][w] is "x":
+            h+=1
+        else:
+            return True
+    return False
+        
+        
 # def get_neighbors(level, pos):
 #     neighbors = []
 #     for move in [-1, 0, 1]:
@@ -29,20 +65,3 @@ def metrices(level):
 #             if next not in visited:
 #                 heappush(queue, next)   
 #     return 0.0
-def has_valid_path(level):
-    game_width = len(level[0])
-    for w in range(game_width):
-        if not passable(level, 1, w):
-            return 0.0
-    return 1.0
-
-def passable(level, h, w):
-    while h < len(level)-1:
-        if level[h][w] is "x":
-            h+=1
-        else:
-            return True
-    return False
-        
-        
-

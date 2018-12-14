@@ -1,6 +1,7 @@
 import random
 from checks import *
 from behaviors import *
+from level_fitness import player_metrices
 # def is_obstacle_in_way():
 #     print("in obstacle in way")
 #     return True
@@ -23,7 +24,7 @@ class Individual(object):
 
     def __init__(self, chromosome):
         self.chromosome = chromosome
-        self.fitness = self.cal_fitness()
+        self.fitness = None
 
     @classmethod
     def mutated_genes(self):
@@ -34,6 +35,11 @@ class Individual(object):
     def create_gnome(self):
         return [self.mutated_genes() for _ in range(G_LENGTH)]
 
+    
+    def cal_fitness(self, level_pop):
+        self.fitness = player_metrices(self, level_pop)
+        return self.fitness
+    
     def mate(self, par2):
         # chromosome for offspring
         child_chromosome = []
@@ -60,10 +66,6 @@ class Individual(object):
                 # create new Individual(offspring) using
         # generated chromosome for offspring
         return Individual(child_chromosome)
-
-    def cal_fitness(self):
-        fitness = 0
-        return fitness
 
     # Driver code
 
