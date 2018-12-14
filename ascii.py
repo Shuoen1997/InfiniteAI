@@ -19,7 +19,7 @@ map_width = 240
 game_height = 20
 game_width = 120
 player_x = 3
-player_y = 8
+player_y = 9
 
 
 # xxxx

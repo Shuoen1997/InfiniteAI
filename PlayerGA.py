@@ -13,9 +13,7 @@ from behaviors import *
 map_height = 20
 map_width = 240
 
-
-# GENES = [(is_obstacle_in_way, stay), (is_obstacle_in_way, move_random_vert)]
-GENES = [(is_10obstacle_in_way, move_random_vert),(is_10obstacle_in_way, variable_oscillate),(is_10obstacle_in_way, fixed_oscillate),(is_10obstacle_in_way, move_alittle),(is_20obstacle_in_way, move_random_vert),(is_20obstacle_in_way, variable_oscillate),(is_20obstacle_in_way, fixed_oscillate),(is_20obstacle_in_way, move_alittle),(is_15obstacle_in_way, move_random_vert),(is_15obstacle_in_way, variable_oscillate),(is_15obstacle_in_way, fixed_oscillate),(is_15obstacle_in_way, move_alittle),(is_5obstacle_in_way, move_random_vert),(is_5obstacle_in_way, variable_oscillate),(is_5obstacle_in_way, fixed_oscillate),(is_5obstacle_in_way, move_alittle)]
+GENES = [(is_10obstacle_in_way, move_random_vert),(is_10obstacle_in_way, variable_oscillate),(is_10obstacle_in_way, fixed_oscillate),(is_10obstacle_in_way, move_alittle),(is_20obstacle_in_way, move_random_vert),(is_20obstacle_in_way, variable_oscillate),(is_20obstacle_in_way, fixed_oscillate),(is_20obstacle_in_way, move_alittle),(is_15obstacle_in_way, move_random_vert),(is_15obstacle_in_way, variable_oscillate),(is_15obstacle_in_way, fixed_oscillate),(is_15obstacle_in_way, move_alittle),(is_5obstacle_in_way, move_random_vert),(is_5obstacle_in_way, variable_oscillate),(is_5obstacle_in_way, fixed_oscillate),(is_5obstacle_in_way, move_alittle),(is_10obstacle_in_way,"smart_selection"),(is_20obstacle_in_way,"smart_selection"),(is_15obstacle_in_way,"smart_selection"),(is_5obstacle_in_way,"smart_selection")]
 
 G_LENGTH = 2
 
