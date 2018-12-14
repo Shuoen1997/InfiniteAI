@@ -43,6 +43,9 @@ if __name__ == "__main__":
         level_population = sorted(level_population, key=lambda x: x.cal_fitness(player_population))
         player_population = sorted(player_population, key=lambda x: x.cal_fitness(level_population))
         print(level_population[-1].fitness)
+        print(level_population[-1].chromosome)
+        print(player_population[-1].fitness)
+        print(player_population[-1].chromosome)
         # if the individual having lowest fitness score ie.
         # 0 then we know that we have reached to the target
         # and break the loop

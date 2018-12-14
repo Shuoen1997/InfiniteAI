@@ -19,7 +19,7 @@ def player_metrices(player, level_pop):
         distance_travelled = simulation(level.init_level(), player_behavior.execute, verbose=False)
         overall_travel_dis += distance_travelled
     
-    pass_cap = overall_travel_dis / map_width * len(level_pop) 
+    pass_cap = overall_travel_dis / ( map_width * len(level_pop) ) 
     return pass_cap
 
 
